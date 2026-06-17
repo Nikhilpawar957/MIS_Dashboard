@@ -4,6 +4,12 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import "toastr/build/toastr.min.css";
+// Supports weights 300-900
+import '@fontsource-variable/figtree';
+import "./utils/toastr";
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>

@@ -92,6 +92,9 @@ function SignIn() {
                             </div>
                             <span className="errors text-danger password-error">{errors.password ? errors.password.message : null}</span>
                         </div>
+                        <div className="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-5">
+                            <a href="/forgot-password" className="link-primary">Forgot Password ?</a>
+                        </div>
                         <div className="d-grid">
                             <button type="submit" className="btn btn-primary hover-elevate-down">
                                 Sign In
