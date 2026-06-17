@@ -17,7 +17,9 @@ export const loginUser = async (payload) => {
 
     const res = await loginApi(payload);
 
-    const { token, refreshToken, user } = res.data;
+    const { token, refreshToken, fullName, email, role } = res.data;
+
+    const user = { fullName, email, role };
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
     localStorage.setItem("authToken", token);

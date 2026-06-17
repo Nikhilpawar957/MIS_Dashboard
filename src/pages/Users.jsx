@@ -1,4 +1,5 @@
 import React from 'react';
+import UsersTable from '../components/tables/UsersTable';
 
 function Users() {
     document.title = "MIS - Users";
@@ -27,7 +28,7 @@ function Users() {
             </div>
             <div id="kt_app_content" className="app-content flex-column-fluid">
                 <div id="kt_app_content_container" className="app-container container-fluid">
-                    
+                    <UsersTable />
                 </div>
             </div>
         </>
