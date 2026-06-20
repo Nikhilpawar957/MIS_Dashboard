@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { logoutUser } from '../../hooks/use-auth';
 
 function Header() {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,7 +52,7 @@ function Header() {
                   </div>
                 </div>
                 <div className="menu-item px-5">
-                  <a href="#" className="menu-link px-5" onClick={logoutUser}>
+                  <a href="/" className="menu-link px-5" onClick={logoutUser}>
                     Sign Out
                   </a>
                 </div>

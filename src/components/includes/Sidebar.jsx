@@ -53,7 +53,7 @@ function Sidebar() {
               )}
 
               <div className="menu-item">
-                <a className="menu-link" href="#" onClick={logoutUser}>
+                <a className="menu-link" href="/" onClick={logoutUser}>
                   <span className="menu-icon">
                     <i className="fa-solid fa-right-from-bracket fs-1"></i>
                   </span>

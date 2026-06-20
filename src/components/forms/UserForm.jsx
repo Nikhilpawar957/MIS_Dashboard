@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { createUserApi } from '../../services';
 
 function UserForm({ dataTable }) {
-    const { register, handleSubmit, reset, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors } } = useForm();
     const form = document.getElementById("userForm");
 
     const watch = (field) => {
