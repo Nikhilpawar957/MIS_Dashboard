@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom'
 import { logoutUser } from '../../hooks/use-auth';
 
 function Sidebar() {
+  const role = localStorage.getItem("role");
   return (
     <div id="kt_app_sidebar" className="app-sidebar flex-column" data-kt-drawer="true" data-kt-drawer-name="app-sidebar"
       data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="225px"
@@ -38,6 +39,9 @@ function Sidebar() {
                   <span className="menu-title">Dashboard</span>
                 </NavLink>
               </div>
+
+            {/* User Management Only for ADMIN */}
+            {role === "ADMIN" && (
               <div className="menu-item">
                 <NavLink className="menu-link" to="/users">
                   <span className="menu-icon">
@@ -46,6 +50,8 @@ function Sidebar() {
                   <span className="menu-title">Users</span>
                 </NavLink>
               </div>
+              )}
+
               <div className="menu-item">
                 <a className="menu-link" href="#" onClick={logoutUser}>
                   <span className="menu-icon">

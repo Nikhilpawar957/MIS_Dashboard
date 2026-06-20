@@ -1,5 +1,6 @@
 import React from 'react';
 import UsersTable from '../components/tables/UsersTable';
+import UserForm from '../components/forms/UserForm';
 
 function Users() {
     document.title = "MIS - Users";
@@ -8,16 +9,16 @@ function Users() {
             <div id="kt_app_toolbar" className="app-toolbar py-3 py-lg-6">
                 <div id="kt_app_toolbar_container" className="app-container container-fluid d-flex flex-stack">
                     <div className="page-title d-flex flex-column justify-content-center flex-wrap me-3">
-                        <h1 className="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">Users
+                        <h1 className="page-heading d-flex fw-bold fs-3 flex-column justify-content-center my-0">Users
                         </h1>
                         <ul className="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
-                            <li className="breadcrumb-item text-muted">
-                                <a href="/dashboard" className="text-muted text-hover-primary">Home</a>
+                            <li className="breadcrumb-item text-light">
+                                <a href="/dashboard" className="text-light text-hover-primary">Home</a>
                             </li>
                             <li className="breadcrumb-item">
-                                <span className="bullet bg-gray-500 w-5px h-2px"></span>
+                                <span className="bullet bg-light w-5px h-2px"></span>
                             </li>
-                            <li className="breadcrumb-item text-muted">Users</li>
+                            <li className="breadcrumb-item text-light">Users</li>
                         </ul>
                     </div>
                     <div className="d-flex align-items-center gap-2 gap-lg-3">
@@ -29,6 +30,12 @@ function Users() {
             <div id="kt_app_content" className="app-content flex-column-fluid">
                 <div id="kt_app_content_container" className="app-container container-fluid">
                     <UsersTable />
+                </div>
+            </div>
+
+            <div className="modal fade" id="addEditModal" tabIndex="-1" aria-labelledby="addEditModalLabel" aria-hidden="true">
+                <div className="modal-dialog modal-dialog-centered">
+                    <UserForm />
                 </div>
             </div>
         </>

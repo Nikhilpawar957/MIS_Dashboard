@@ -1,44 +1,35 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { resetPasswordApi } from '../../services/index';
+import { registerApi } from '../../services';
 import Toastr from '../../utils/toastr';
 
-function ResetPassword() {
-    document.title = "MIS - Reset Password";
+function SignUp() {
+    document.title = "MIS - Sign Up";
     const { register, handleSubmit, formState: { errors } } = useForm();
     const navigate = useNavigate();
 
-    const form = document.getElementById("resetPasswordForm");
+    const form = document.getElementById("signUpForm");
     
     const watch = (field) => {
         return form ? form[field].value : "";
     };
 
-    const token = new URLSearchParams(window.location.search).get("token");
-
-    if (!token) {
-        Toastr.error("Invalid password reset link");
-        navigate("/");
-    }
-
     const validForm = {
-        otp: {
+        fullName: {
+            required:{
+                value: true,
+                message: "Full Name is required"
+            },
+        },
+        email: {
             required: {
                 value: true,
-                message: "OTP is required"
-            },
-            minLength: {
-                value: 6,
-                message: "OTP must be 6 characters long"
-            },
-            maxLength: {
-                value: 6,
-                message: "OTP must be 6 characters long"
+                message: "Email is required"
             },
             pattern: {
-                value: /^\d{6}$/,
-                message: "OTP must be a 6-digit number"
+                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                message: "Please enter a valid email address"
             }
         },
         password: {
@@ -69,8 +60,8 @@ function ResetPassword() {
     };
 
     const onSubmit = (data) => {
-        resetPasswordApi(data).then(() => {
-            Toastr.success("Password reset successful!");
+        registerApi(data).then(() =>{
+            Toastr.success("Registeration successful!");
             setTimeout(() => {
                 navigate("/");
             }, 1500);
@@ -84,17 +75,22 @@ function ResetPassword() {
         <>
             <div className="bg-body d-flex flex-column align-items-stretch flex-center rounded-4 w-md-500px p-15">
                 <div className="d-flex flex-center flex-column flex-column-fluid">
-                    <form className="form w-100" noValidate="novalidate" id="resetPasswordForm" onSubmit={handleSubmit(onSubmit)}>
+                    <form className="form w-100" noValidate="novalidate" id="signUpForm" onSubmit={handleSubmit(onSubmit)}>
                         <div className="text-center mb-5">
-                            <h1 className="text-gray-900 fw-bolder mb-1">Reset Password</h1>
-                            <div className="text-gray-500 fw-semibold fs-6">Please enter your new password</div>
+                            <h1 className="text-gray-900 fw-bolder mb-1">New User SignUp</h1>
+                            <div className="text-gray-500 fw-semibold fs-6">Please enter your details</div>
                         </div>
-                        <input type="hidden" name="token" value={token} {...register("token")} />
                         <div className="fv-row mb-8">
-                            <label htmlFor="otp" className="required form-label">OTP</label>
-                            <input type="text" minLength="6" maxLength="6" placeholder="OTP" name="otp" autoComplete="off"
-                                className="form-control form-control-solid" id="otp" {...register("otp", validForm.otp)} />
-                            <span className="errors text-danger email-error">{errors.otp ? errors.otp.message : null}</span>
+                            <label htmlFor="fullName" className="required form-label">Full Name</label>
+                            <input type="text" minLength="3" maxLength="100" placeholder="Enter Full Name eg:- John Doe" name="fullName" autoComplete="off"
+                                className="form-control form-control-solid" id="fullName" {...register("fullName", validForm.fullName)} />
+                            <span className="errors text-danger email-error">{errors.fullName ? errors.fullName.message : null}</span>
+                        </div>
+                        <div className="fv-row mb-8">
+                            <label htmlFor="password" className="required form-label">Email</label>
+                            <input type="email" placeholder="Enter Email eg:- abc@mail.com" name="email" autoComplete="off"
+                                className="form-control form-control-solid" id="email" {...register("email", validForm.email)} />
+                            <span className="errors text-danger email-error">{errors.email ? errors.email.message : null}</span>
                         </div>
                         <div className="fv-row mb-8">
                             <label htmlFor="password" className="required form-label">New Password</label>
@@ -110,10 +106,10 @@ function ResetPassword() {
                         </div>
                         <div className="d-grid">
                             <button type="submit" className="btn btn-primary hover-elevate-down">
-                                Reset Password
+                                Sign Up
                             </button>
                         </div>
-
+                        <div className="text-center fs-base fw-semibold mt-4"><a href="/" className="link-primary fs-5">Back to Sign In</a></div>
                     </form>
                 </div>
             </div>
@@ -121,4 +117,4 @@ function ResetPassword() {
     );
 }
 
-export default ResetPassword;
+export default SignUp;

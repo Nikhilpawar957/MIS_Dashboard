@@ -17,13 +17,12 @@ export const loginUser = async (payload) => {
 
     const res = await loginApi(payload);
 
-    const { token, refreshToken, fullName, email, role } = res.data;
-
-    const user = { fullName, email, role };
+    const { token, refreshToken, user } = res.data;
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
     localStorage.setItem("authToken", token);
     localStorage.setItem("refreshToken", refreshToken);
+    localStorage.setItem("role", user.role);
     window.dispatchEvent(new Event(EVENT));
 };
 
@@ -31,6 +30,7 @@ export const logoutUser = () => {
     localStorage.removeItem(STORAGE_KEY);
     localStorage.removeItem("authToken");
     localStorage.removeItem("refreshToken");
+    localStorage.removeItem("role");
     window.dispatchEvent(new Event(EVENT));
 };
 

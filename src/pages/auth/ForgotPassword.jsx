@@ -9,6 +9,8 @@ function ForgotPassword() {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const navigate = useNavigate();
 
+    const form = document.getElementById("forgotPasswordForm");
+
     const validForm = {
         email: {
             required: {
@@ -26,10 +28,11 @@ function ForgotPassword() {
         forgotPasswordApi(data).then(() => {
             Toastr.success("Password reset link sent to your email!");
             setTimeout(() => {
-                navigate("/signin");
+                navigate("/");
             }, 1500);
+            form.reset();
         }).catch((error) => {
-            Toastr.error(error.message || "Failed to send reset link");
+            Toastr.error(error.message || "Something went wrong");
         });
     };
 
@@ -53,7 +56,7 @@ function ForgotPassword() {
                                 Send Reset Link
                             </button>
                         </div>
-                        <div className="text-center fs-base fw-semibold mt-4"><a href="/" class="link-primary fs-5">Back to Sign In</a></div>
+                        <div className="text-center fs-base fw-semibold mt-4"><a href="/" className="link-primary fs-5">Back to Sign In</a></div>
                     </form>
                 </div>
             </div>

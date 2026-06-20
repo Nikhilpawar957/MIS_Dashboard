@@ -1,6 +1,10 @@
 body {
   font-family: 'Figtree Variable', sans-serif;
-  background-color: #f4f6fa !important;
+  background-image: url("/public/media/auth/bg6.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 }
 
 

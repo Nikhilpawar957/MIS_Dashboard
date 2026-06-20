@@ -7,6 +7,7 @@ import PageLayout from "../layouts/PageLayout";
 // Pages
 // Auth
 import SignIn from "../pages/auth/SignIn";
+import SignUp from "../pages/auth/SignUp";
 import ForgotPassword from "../pages/auth/ForgotPassword";
 import ResetPassword from "../pages/auth/ResetPassword";
 
@@ -15,7 +16,9 @@ import Dashboard from "../pages/Dashboard";
 import Users from "../pages/Users";
 
 // Errors
-import Error_404 from "../pages/errors/Error_404";
+import Error404 from "../pages/errors/Error404";
+import ProtectedRoute from "./ProtectedRoute";
+import Error403 from "../pages/errors/Error403";
 
 function AppRoutes() {
     return (
@@ -24,17 +27,27 @@ function AppRoutes() {
             {/* Auth */}
             <Route element={<AuthLayout />}>
                 <Route path="/" element={<SignIn />} />
+                <Route path="/sign-up" element={<SignUp />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
             </Route>
 
             {/* Main */}
             <Route element={<PageLayout />}>
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/users" element={<Users />} />
+                <Route path="/dashboard" element={
+                    <ProtectedRoute allowedRoles={["ADMIN", "SALES"]}>
+                        <Dashboard />
+                    </ProtectedRoute>
+                    } />
+                <Route path="/users" element={
+                    <ProtectedRoute allowedRoles={["ADMIN"]}>
+                        <Users />
+                    </ProtectedRoute>
+                    } />
             </Route>
 
-            <Route path="*" element={<Error_404 />} />
+            <Route path="/unauthorized" element={<Error403 />} />
+            <Route path="*" element={<Error404 />} />
 
         </Routes>
     );

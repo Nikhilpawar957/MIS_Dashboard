@@ -15,7 +15,7 @@ function Header() {
   }, [user, navigate]);
 
   return (
-    <div id="kt_app_header" className="app-header bg-light">
+    <div id="kt_app_header" className="app-header bg-transparent">
       <div className="app-container container-fluid d-flex align-items-stretch justify-content-between" id="kt_app_header_container">
         <div className="d-flex align-items-center d-lg-none ms-n3 me-1 me-md-2" title="Show sidebar menu">
           <div className="btn btn-icon btn-active-color-primary w-35px h-35px" id="kt_app_sidebar_mobile_toggle">
@@ -32,7 +32,7 @@ function Header() {
         </div>
 
         <div className="d-flex align-items-stretch justify-content-end flex-lg-grow-1" >
-          <div className="app-navbar flex-shrink-0">  
+          <div className="app-navbar flex-shrink-0">
             <div className="app-navbar-item ms-1 ms-md-4" id="kt_header_user_menu_toggle">
               <div className="cursor-pointer symbol symbol-35px" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
                 <img src="/media/avatars/blank.png" className="rounded-3" alt="user" />
@@ -45,9 +45,9 @@ function Header() {
                     </div>
                     <div className="d-flex flex-column">
                       <div className="fw-bold d-flex align-items-center fs-5">
-                        ABC
+                        {user && user.fullName ? user.fullName : "ABC"}
                       </div>
-                      <p className="fw-semibold text-muted text-hover-primary fs-7">abc@mail.com</p>
+                      <p className="fw-semibold text-muted text-hover-primary fs-7">{user && user.email ? user.email : "abc@mail.com"}</p>
                     </div>
                   </div>
                 </div>

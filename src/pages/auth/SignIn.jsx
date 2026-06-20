@@ -1,17 +1,18 @@
 import React from 'react'
 import { useForm } from 'react-hook-form';
-import { useAuth } from '../../hooks/use-auth';
 import { loginUser } from '../../hooks/use-auth';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Toastr from '../../utils/toastr';
 
 function SignIn() {
     document.title = "MIS - Sign In";
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const [form, setForm] = useState({ email: "", password: "" });
     const navigate = useNavigate();
 
+    const user = localStorage.getItem("user");
+    if(user){
+        navigate("/dashboard");
+    }
 
     const isValidPassword = (value) => {
         if (!value) return "Password is required";
@@ -100,6 +101,7 @@ function SignIn() {
                                 Sign In
                             </button>
                         </div>
+                        <div className="text-center fs-base fw-semibold mt-4"><span className="fs-5">New User ? </span><a href="/sign-up" className="link-primary fs-5">Sign Up</a></div>
                     </form>
                 </div>
             </div>

@@ -10,6 +10,16 @@ export const loginApi = async (payload) => {
     }
 }
 
+// Registeration
+export const registerApi = async (payload) => {
+    try {
+        const response = await api.post('/users/register', payload);
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : error;
+    }
+}
+
 // Refresh Token
 export const refreshTokenApi = async (payload) => {
     try {
@@ -34,6 +44,46 @@ export const forgotPasswordApi = async (payload) => {
 export const resetPasswordApi = async (payload) => {
     try {
         const response = await api.post('/auth/reset-password', payload);
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : error;
+    }
+}
+
+// Get All Users
+export const getUsersApi = async () => {
+    try {
+        const response = await api.get('/users/all');
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : error;
+    }
+}
+
+// Get User By ID
+export const getUserByIdApi = async (id) => {
+    try {
+        const response = await api.get(`/users/${id}`);
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : error;
+    }
+}
+
+// Create User
+export const createUserApi = async (payload) => {
+    try {
+        const response = await api.post('/users/register', payload);
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : error;
+    }
+}
+
+// Change User Status
+export const changeUserStatusApi = async (payload) => {
+    try {
+        const response = await api.post('/users/change-status', payload);
         return response.data;
     } catch (error) {
         throw error.response ? error.response.data : error;

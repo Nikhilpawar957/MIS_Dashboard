@@ -13,6 +13,10 @@ function UsersTable() {
             dataTableRef.current = $(tableRef.current).DataTable({
                 processing: true,
                 serverSide: true,
+                aLengthMenu: [
+                    [10, 15, 25, 50, 100, -1],
+                    [10, 15, 25, 50, 100, "All"]
+                ],
                 ajax: {
                     url: `${process.env.REACT_APP_API_BASE_URL}/users/datatables`,
                     type: "POST",
@@ -98,7 +102,7 @@ function UsersTable() {
 
     return (
         <div className="card">
-            <div className="card-body pt-0">
+            <div className="card-body">
                 <table
                     ref={tableRef}
                     className="table align-middle table-row-dashed fs-6 gy-2 mb-0"
