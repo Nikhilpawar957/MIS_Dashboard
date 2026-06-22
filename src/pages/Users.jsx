@@ -24,7 +24,6 @@ toastr.options = {
 
 function Users() {
     const [dataTable, setDataTable] = useState(null);
-    const [data, setData] = useState(null);
     document.title = "MIS - Users";
     return (
         <>
