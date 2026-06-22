@@ -2,11 +2,13 @@ import React, { useEffect, useRef } from "react";
 import $ from "jquery";
 import "datatables.net-bs5";
 import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
+import Swal from "sweetalert2";
+import Toastr from "../../utils/toastr";
+import { getUserByIdApi, changeUserStatusApi } from "../../services";
 
-function UsersTable() {
+function UsersTable({ onTableReady }) {
     const tableRef = useRef();
     const dataTableRef = useRef(null);
-
     useEffect(() => {
         if (!$.fn.DataTable.isDataTable(tableRef.current)) {
             const token = localStorage.getItem("authToken");
@@ -43,23 +45,30 @@ function UsersTable() {
                         data: null,
                         orderable: false,
                         render: function (data, type, row) {
+                            let changeStatusButton = ``;
+                            if (row.status == "INACTIVE") {
+                                changeStatusButton += `
+                                    <button class="btn btn-icon btn-sm btn-active-light-danger change-status-btn" data-id="${row.id}" data-status="ACTIVE" data-bs-toggle="tooltip" data-bs-placement="top" title="Activate">
+                                    <i class="fas fa-check-circle text-success fs-1"></i>
+                                </button>
+                                `;
+                            } else {
+                                changeStatusButton += `
+                                <button class="btn btn-icon btn-sm btn-active-light-danger change-status-btn" data-id="${row.id}" data-status="INACTIVE" data-bs-toggle="tooltip" data-bs-placement="top" title="Deactivate">
+                                    <i class="fas fa-times-circle text-danger fs-1"></i>
+                                </button>
+                                `;
+                            }
                             return `
                                 <div class="d-flex justify-content-end">
-                                <button class="btn btn-icon btn-sm btn-active-light-primary edit-btn" data-id="${row.id}">
-                                    <i class="ki-duotone ki-pencil fs-1">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                    </i>
-                                </button>
-                                <button class="btn btn-icon btn-sm btn-active-light-danger delete-btn" data-id="${row.id}">
-                                    <i class="ki-duotone ki-trash fs-1">
+                                <button class="d-none btn btn-icon btn-sm btn-active-light-primary edit-btn" data-id="${row.id}" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
+                                    <i class="ki-duotone ki-eye fs-1">
                                         <span class="path1"></span>
                                         <span class="path2"></span>
                                         <span class="path3"></span>
-                                        <span class="path4"></span>
-                                        <span class="path5"></span>
                                     </i>
                                 </button>
+                                ${changeStatusButton}
                                 </div>
                             `;
                         },
@@ -67,16 +76,19 @@ function UsersTable() {
                 ],
             });
 
-            // Edit Click
+            if (onTableReady) {
+                onTableReady(dataTableRef.current);
+            }
+
             $(tableRef.current).on("click", ".edit-btn", function () {
                 const id = $(this).data("id");
-                handleEdit(id);
+                handleView(id);
             });
 
-            // Delete Click
-            $(tableRef.current).on("click", ".delete-btn", function () {
+            $(tableRef.current).on("click", ".change-status-btn", function () {
                 const id = $(this).data("id");
-                handleDelete(id);
+                const status = $(this).data("status");
+                handleChangeStatus(id, status);
             });
         }
 
@@ -84,18 +96,45 @@ function UsersTable() {
             // DON'T destroy on every render
             // Only destroy if really unmounting permanently
         };
-    }, []);
+    }, [onTableReady]);
 
-    const handleEdit = (id) => {
-        alert("Edit user ID: " + id);
+    const handleView = (id) => {
+        getUserByIdApi(id).then((response) => {
+            if(response.data){
+
+            }
+        }).catch((error) => {
+            Toastr.error(error.message || "Something Went Wrong");
+        });
+        dataTableRef.current.ajax.reload();
     };
 
-    const handleDelete = async (id) => {
-        if (!window.confirm("Are you sure?")) return;
+    const handleChangeStatus = async (id, status) => {
 
-        await fetch(`${process.env.REACT_APP_API_BASE_URL}/users/${id}`, {
-            method: "DELETE",
+        Swal.fire({
+            title: "Change status to " + status,
+            text: "Are you sure?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#6c757d",
+            confirmButtonText: "Yes",
+        }).then((result) => {
+            const payload = {
+                id, status
+            };
+            changeUserStatusApi(payload).then((response) => {
+                Toastr.success("Status changed to " + status);
+                dataTableRef.current.ajax.reload();
+            }).catch((error) => {
+                Toastr.error(error.message || "Something Went Wrong");
+            });
         });
+
+    }
+
+    const handleDelete = async (id) => {
+
 
         dataTableRef.current.ajax.reload();
     };

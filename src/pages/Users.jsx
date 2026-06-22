@@ -1,8 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import UsersTable from '../components/tables/UsersTable';
 import UserForm from '../components/forms/UserForm';
 
+import toastr from "toastr";
+
+toastr.options = {
+    "closeButton": false,
+    "debug": false,
+    "newestOnTop": false,
+    "progressBar": false,
+    "positionClass": "toastr-top-right",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+};
+
 function Users() {
+    const [dataTable, setDataTable] = useState(null);
+    const [data, setData] = useState(null);
     document.title = "MIS - Users";
     return (
         <>
@@ -29,13 +51,13 @@ function Users() {
             </div>
             <div id="kt_app_content" className="app-content flex-column-fluid">
                 <div id="kt_app_content_container" className="app-container container-fluid">
-                    <UsersTable />
+                    <UsersTable onTableReady={setDataTable} />
                 </div>
             </div>
 
             <div className="modal fade" id="addEditModal" tabIndex="-1" aria-labelledby="addEditModalLabel" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered">
-                    <UserForm />
+                    <UserForm dataTable={dataTable} toastr={toastr} />
                 </div>
             </div>
         </>

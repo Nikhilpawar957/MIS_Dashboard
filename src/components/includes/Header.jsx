@@ -1,6 +1,6 @@
 import { useAuth } from "../../hooks/use-auth";
-import { useNavigate } from "react-router-dom";
-import React from 'react'
+import { useNavigate, NavLink } from "react-router-dom";
+import React from 'react';
 import { useEffect } from "react";
 import { logoutUser } from '../../hooks/use-auth';
 
@@ -52,9 +52,9 @@ function Header() {
                   </div>
                 </div>
                 <div className="menu-item px-5">
-                  <a href="/" className="menu-link px-5" onClick={logoutUser}>
+                  <NavLink to="/" className="menu-link px-5" onClick={logoutUser}>
                     Sign Out
-                  </a>
+                  </NavLink>
                 </div>
               </div>
             </div>

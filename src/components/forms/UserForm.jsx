@@ -87,6 +87,7 @@ function UserForm({ dataTable }) {
             Toastr.success("User Added");
             form.reset();
             closeModalProperly();
+            
             if (dataTable) {
                 setTimeout(() => {
                     dataTable.ajax.reload(null, false);
