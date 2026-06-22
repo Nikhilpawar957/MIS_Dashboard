@@ -46,7 +46,7 @@ function UsersTable({ onTableReady }) {
                         orderable: false,
                         render: function (data, type, row) {
                             let changeStatusButton = ``;
-                            if (row.status == "INACTIVE") {
+                            if (row.status === "INACTIVE") {
                                 changeStatusButton += `
                                     <button class="btn btn-icon btn-sm btn-active-light-danger change-status-btn" data-id="${row.id}" data-status="ACTIVE" data-bs-toggle="tooltip" data-bs-placement="top" title="Activate">
                                     <i class="fas fa-check-circle text-success fs-1"></i>
@@ -132,12 +132,6 @@ function UsersTable({ onTableReady }) {
         });
 
     }
-
-    const handleDelete = async (id) => {
-
-
-        dataTableRef.current.ajax.reload();
-    };
 
     return (
         <div className="card">
