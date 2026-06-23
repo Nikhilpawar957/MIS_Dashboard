@@ -89,3 +89,43 @@ export const changeUserStatusApi = async (payload) => {
         throw error.response ? error.response.data : error;
     }
 }
+
+// Get Group By ID
+export const getGroupByIdApi = async (id) => {
+    try {
+        const response = await api.get(`/groups/${id}`);
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : error;
+    }
+}
+
+// Add Group
+export const addGroupApi = async (payload) => {
+    try {
+        const response = await api.post('/groups/add', payload);
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : error;
+    }
+}
+
+// Update Group
+export const updateGroupApi = async (id, payload) => {
+    try {
+        const response = await api.patch(`/groups/${id}`, payload);
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : error;
+    }
+}
+
+//Delete Group
+export const deleteGroupByIdApi = async (id) => {
+    try {
+        const response = await api.delete(`/groups/${id}`);
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : error;
+    }
+}

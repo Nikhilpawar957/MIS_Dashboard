@@ -4,11 +4,13 @@ import "datatables.net-bs5";
 import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
 import Swal from "sweetalert2";
 import Toastr from "../../utils/toastr";
-import { getUserByIdApi, changeUserStatusApi } from "../../services";
+import { deleteGroupByIdApi } from "../../services"; // Note: getGroupByIdApi removed here since Form handles it now
 
-function UsersTable({ onTableReady }) {
+// 1. Make sure to receive 'onEditClick' here as a prop
+function GroupsTable({ onTableReady, onEditClick }) {
     const tableRef = useRef();
     const dataTableRef = useRef(null);
+
     useEffect(() => {
         if (!$.fn.DataTable.isDataTable(tableRef.current)) {
             const token = localStorage.getItem("authToken");
@@ -20,7 +22,7 @@ function UsersTable({ onTableReady }) {
                     [10, 15, 25, 50, 100, "All"]
                 ],
                 ajax: {
-                    url: `${process.env.REACT_APP_API_BASE_URL}/users/datatables`,
+                    url: `${process.env.REACT_APP_API_BASE_URL}/groups/datatables`,
                     type: "POST",
                     contentType: "application/json",
                     headers: {
@@ -37,38 +39,28 @@ function UsersTable({ onTableReady }) {
                             return meta.row + meta.settings._iDisplayStart + 1;
                         }
                     },
-                    { data: "fullName" },
-                    { data: "email" },
-                    { data: "role" },
-                    { data: "status" },
+                    { data: "name" },
                     {
                         data: null,
                         orderable: false,
                         render: function (data, type, row) {
-                            let changeStatusButton = ``;
-                            if (row.status === "INACTIVE") {
-                                changeStatusButton += `
-                                    <button class="btn btn-icon btn-sm btn-active-light-danger change-status-btn" data-id="${row.id}" data-status="ACTIVE" data-bs-toggle="tooltip" data-bs-placement="top" title="Activate">
-                                    <i class="fas fa-check-circle text-success fs-1"></i>
-                                </button>
-                                `;
-                            } else {
-                                changeStatusButton += `
-                                <button class="btn btn-icon btn-sm btn-active-light-danger change-status-btn" data-id="${row.id}" data-status="INACTIVE" data-bs-toggle="tooltip" data-bs-placement="top" title="Deactivate">
-                                    <i class="fas fa-times-circle text-danger fs-1"></i>
-                                </button>
-                                `;
-                            }
                             return `
                                 <div class="d-flex justify-content-end">
-                                <button class="d-none btn btn-icon btn-sm btn-active-light-primary edit-btn" data-id="${row.id}" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
-                                    <i class="ki-duotone ki-eye fs-1">
+                                <button class="btn btn-icon btn-sm btn-active-light-primary edit-btn" data-id="${row.id}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                    <i class="ki-duotone ki-pencil fs-1">
                                         <span class="path1"></span>
                                         <span class="path2"></span>
                                         <span class="path3"></span>
                                     </i>
                                 </button>
-                                ${changeStatusButton}
+                                <button class="btn btn-icon btn-sm btn-active-light-danger delete-btn" data-id="${row.id}" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                    <i class="ki-duotone ki-trash fs-1">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                        <span class="path3"></span>
+                                        <span class="path4"></span>
+                                    </i>
+                                </button>
                                 </div>
                             `;
                         },
@@ -80,39 +72,41 @@ function UsersTable({ onTableReady }) {
                 onTableReady(dataTableRef.current);
             }
 
-            $(tableRef.current).on("click", ".edit-btn", function () {
+            // 2. Handle the Edit Click Event
+            $(tableRef.current).on("click.groupsTable", ".edit-btn", function () {
                 const id = $(this).data("id");
-                handleView(id);
+                
+                // Lift state up to Groups.jsx page component
+                if (onEditClick) {
+                    onEditClick(id); 
+                }
+
+                // Programmatically pop open the Bootstrap Modal
+                const modalEl = document.getElementById("addEditModal");
+                if (modalEl) {
+                    const modalInstance = window.bootstrap.Modal.getOrCreateInstance(modalEl);
+                    modalInstance.show();
+                }
             });
 
-            $(tableRef.current).on("click", ".change-status-btn", function () {
+            $(tableRef.current).on("click.groupsTable", ".delete-btn", function () {
                 const id = $(this).data("id");
-                const status = $(this).data("status");
-                handleChangeStatus(id, status);
+                handleDelete(id);
             });
         }
 
         return () => {
-            // DON'T destroy on every render
-            // Only destroy if really unmounting permanently
+            // if (dataTableRef.current) {
+            //     $(tableRef.current).off(".groupsTable");
+            //     dataTableRef.current.destroy(true);
+            //     dataTableRef.current = null;
+            // }
         };
-    }, [onTableReady]);
+    }, [onTableReady, onEditClick]); // 3. Add onEditClick to the dependency array
 
-    const handleView = (id) => {
-        getUserByIdApi(id).then((response) => {
-            if (response.data) {
-                
-            }
-        }).catch((error) => {
-            Toastr.error(error.message || "Something Went Wrong");
-        });
-        dataTableRef.current.ajax.reload();
-    };
-
-    const handleChangeStatus = async (id, status) => {
-
+    const handleDelete = async (id) => {
         Swal.fire({
-            title: "Change status to " + status,
+            title: "Confirm Delete",
             text: "Are you sure?",
             icon: "warning",
             showCancelButton: true,
@@ -121,19 +115,17 @@ function UsersTable({ onTableReady }) {
             confirmButtonText: "Yes",
         }).then((result) => {
             if (result.isConfirmed) {
-                const payload = {
-                    id, status
-                };
-                changeUserStatusApi(payload).then((response) => {
-                    Toastr.success("Status changed to " + status);
-                    dataTableRef.current.ajax.reload();
-                }).catch((error) => {
-                    Toastr.error(error.message || "Something Went Wrong");
-                });
+                deleteGroupByIdApi(id)
+                    .then((response) => {
+                        Toastr.success(response.message);
+                        dataTableRef.current.ajax.reload(null, false);
+                    })
+                    .catch((error) => {
+                        Toastr.error(error.message || "Something Went Wrong");
+                    });
             }
         });
-
-    }
+    };
 
     return (
         <div className="card">
@@ -146,10 +138,7 @@ function UsersTable({ onTableReady }) {
                     <thead>
                         <tr className="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
                             <th className="w-10px pe-2">#</th>
-                            <th className="min-w-125px">Name</th>
-                            <th className="min-w-125px">Email</th>
-                            <th className="min-w-125px">Role</th>
-                            <th className="min-w-125px">Status</th>
+                            <th className="min-w-300px">Name</th>
                             <th className="text-end min-w-70px">Actions</th>
                         </tr>
                     </thead>
@@ -159,4 +148,4 @@ function UsersTable({ onTableReady }) {
     );
 }
 
-export default UsersTable;
+export default GroupsTable;

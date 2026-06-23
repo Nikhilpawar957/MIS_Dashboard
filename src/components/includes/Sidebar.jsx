@@ -40,6 +40,15 @@ function Sidebar() {
                 </NavLink>
               </div>
 
+              <div className="menu-item">
+                <NavLink className="menu-link" to="/groups">
+                  <span className="menu-icon">
+                      <i className="fa-regular fa-object-group fs-1"></i>
+                  </span>
+                  <span className="menu-title">Groups</span>
+                </NavLink>
+              </div>
+
             {/* User Management Only for ADMIN */}
             {role === "ADMIN" && (
               <div className="menu-item">
@@ -51,6 +60,8 @@ function Sidebar() {
                 </NavLink>
               </div>
               )}
+
+              
 
               <div className="menu-item">
                 <NavLink className="menu-link" to="/" onClick={logoutUser}>

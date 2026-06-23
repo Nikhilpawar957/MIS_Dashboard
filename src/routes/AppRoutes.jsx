@@ -13,6 +13,7 @@ import ResetPassword from "../pages/auth/ResetPassword";
 
 // Main
 import Dashboard from "../pages/Dashboard";
+import Groups from "../pages/Groups";
 import Users from "../pages/Users";
 
 // Errors
@@ -34,11 +35,22 @@ function AppRoutes() {
 
             {/* Main */}
             <Route element={<PageLayout />}>
+
+                {/* Dashboard */}
                 <Route path="/dashboard" element={
                     <ProtectedRoute allowedRoles={["ADMIN", "SALES"]}>
                         <Dashboard />
                     </ProtectedRoute>
                     } />
+
+                {/* Groups */}
+                <Route path="/groups" element={
+                    <ProtectedRoute allowedRoles={["ADMIN", "SALES"]}>
+                        <Groups />
+                    </ProtectedRoute>
+                } />
+
+                {/* Users */}
                 <Route path="/users" element={
                     <ProtectedRoute allowedRoles={["ADMIN"]}>
                         <Users />
