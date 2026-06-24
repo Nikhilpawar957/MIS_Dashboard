@@ -21,10 +21,10 @@ function ChainForm({ dataTable, selectedChainId }) {
         message: "Invalid GST Number"
       }
     }
+    
   };
-  const selectElement = window.$('#customerGroupIdSelect');
-
   useEffect(() => {
+    const selectElement = window.$('#customerGroupIdSelect');
     // Listen for the Select2 specific change event
     selectElement.on('change', function (e) {
       const selectedValue = e.target.value;
