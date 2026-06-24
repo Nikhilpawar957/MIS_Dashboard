@@ -4,10 +4,9 @@ import "datatables.net-bs5";
 import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
 import Swal from "sweetalert2";
 import Toastr from "../../utils/toastr";
-import { deleteGroupByIdApi } from "../../services"; // Note: getGroupByIdApi removed here since Form handles it now
+import { deleteChainByIdApi } from "../../services";
 
-// 1. Make sure to receive 'onEditClick' here as a prop
-function GroupsTable({ onTableReady, onEditClick }) {
+function ChainsTable({ onTableReady, onEditClick }) {
     const tableRef = useRef();
     const dataTableRef = useRef(null);
 
@@ -22,7 +21,7 @@ function GroupsTable({ onTableReady, onEditClick }) {
                     [10, 15, 25, 50, 100, "All"]
                 ],
                 ajax: {
-                    url: `${process.env.REACT_APP_API_BASE_URL}/groups/datatables`,
+                    url: `${process.env.REACT_APP_API_BASE_URL}/chains/datatables`,
                     type: "POST",
                     contentType: "application/json",
                     headers: {
@@ -39,30 +38,32 @@ function GroupsTable({ onTableReady, onEditClick }) {
                             return meta.row + meta.settings._iDisplayStart + 1;
                         }
                     },
-                    { data: "name" },
+                    { data: "groupName" },
+                    { data: "companyName" },
+                    { data: "gstNumber" },
                     {
                         data: null,
                         orderable: false,
                         render: function (data, type, row) {
                             return `
-                                <div class="d-flex justify-content-end">
-                                <button class="btn btn-icon btn-sm btn-active-light-primary edit-btn" data-id="${row.id}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
-                                    <i class="ki-duotone ki-pencil fs-1">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                        <span class="path3"></span>
-                                    </i>
-                                </button>
-                                <button class="btn btn-icon btn-sm btn-active-light-danger delete-btn" data-id="${row.id}" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
-                                    <i class="ki-duotone ki-trash fs-1">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                        <span class="path3"></span>
-                                        <span class="path4"></span>
-                                    </i>
-                                </button>
-                                </div>
-                            `;
+                                  <div class="d-flex justify-content-end">
+                                  <button class="btn btn-icon btn-sm btn-active-light-primary edit-btn" data-id="${row.id}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                      <i class="ki-duotone ki-pencil fs-1">
+                                          <span class="path1"></span>
+                                          <span class="path2"></span>
+                                          <span class="path3"></span>
+                                      </i>
+                                  </button>
+                                  <button class="btn btn-icon btn-sm btn-active-light-danger delete-btn" data-id="${row.id}" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                      <i class="ki-duotone ki-trash fs-1">
+                                          <span class="path1"></span>
+                                          <span class="path2"></span>
+                                          <span class="path3"></span>
+                                          <span class="path4"></span>
+                                      </i>
+                                  </button>
+                                  </div>
+                              `;
                         },
                     },
                 ],
@@ -73,12 +74,12 @@ function GroupsTable({ onTableReady, onEditClick }) {
             }
 
             // 2. Handle the Edit Click Event
-            $(tableRef.current).on("click.groupsTable", ".edit-btn", function () {
+            $(tableRef.current).on("click.chainsTable", ".edit-btn", function () {
                 const id = $(this).data("id");
-                
+
                 // Lift state up to Groups.jsx page component
                 if (onEditClick) {
-                    onEditClick(id); 
+                    onEditClick(id);
                 }
 
                 // Programmatically pop open the Bootstrap Modal
@@ -89,7 +90,7 @@ function GroupsTable({ onTableReady, onEditClick }) {
                 }
             });
 
-            $(tableRef.current).on("click.groupsTable", ".delete-btn", function () {
+            $(tableRef.current).on("click.chainsTable", ".delete-btn", function () {
                 const id = $(this).data("id");
                 handleDelete(id);
             });
@@ -97,7 +98,7 @@ function GroupsTable({ onTableReady, onEditClick }) {
 
         return () => {
             // if (dataTableRef.current) {
-            //     $(tableRef.current).off(".groupsTable");
+            //     $(tableRef.current).off(".chainsTable");
             //     dataTableRef.current.destroy(true);
             //     dataTableRef.current = null;
             // }
@@ -115,7 +116,7 @@ function GroupsTable({ onTableReady, onEditClick }) {
             confirmButtonText: "Yes",
         }).then((result) => {
             if (result.isConfirmed) {
-                deleteGroupByIdApi(id)
+                deleteChainByIdApi(id)
                     .then((response) => {
                         Toastr.success(response.message);
                         dataTableRef.current.ajax.reload(null, false);
@@ -138,7 +139,9 @@ function GroupsTable({ onTableReady, onEditClick }) {
                     <thead>
                         <tr className="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
                             <th className="w-10px pe-2">#</th>
-                            <th>Name</th>
+                            <th>Group Name</th>
+                            <th>Company Name</th>
+                            <th>GSTIN</th>
                             <th className="text-end min-w-70px">Actions</th>
                         </tr>
                     </thead>
@@ -148,4 +151,4 @@ function GroupsTable({ onTableReady, onEditClick }) {
     );
 }
 
-export default GroupsTable;
+export default ChainsTable

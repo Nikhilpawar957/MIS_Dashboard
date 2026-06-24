@@ -17,6 +17,66 @@ function Dashboard() {
             <div id="kt_app_content" className="app-content flex-column-fluid">
                 <div id="kt_app_content_container" className="app-container container-fluid">
                     <div className="row">
+                        <div className="col-xxl-2 col-xl-3 col-md-4 mb-4">
+                            <div className="card card-flush">
+                                <div className="card-header">
+                                    <div className="card-title d-flex flex-column">
+                                        <span className="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">0</span>
+                                        <span className="text-gray-500 pt-1 fw-semibold fs-6">Total Groups</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-xxl-2 col-xl-3 col-md-4 mb-4">
+                            <div className="card card-flush">
+                                <div className="card-header">
+                                    <div className="card-title d-flex flex-column">
+                                        <span className="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">0</span>
+                                        <span className="text-gray-500 pt-1 fw-semibold fs-6">Total Chains</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-xxl-2 col-xl-3 col-md-4 mb-4">
+                            <div className="card card-flush">
+                                <div className="card-header">
+                                    <div className="card-title d-flex flex-column">
+                                        <span className="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">0</span>
+                                        <span className="text-gray-500 pt-1 fw-semibold fs-6">Total Brands</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-xxl-2 col-xl-3 col-md-4 mb-4">
+                            <div className="card card-flush">
+                                <div className="card-header">
+                                    <div className="card-title d-flex flex-column">
+                                        <span className="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">0</span>
+                                        <span className="text-gray-500 pt-1 fw-semibold fs-6">Total Estimate</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-xxl-2 col-xl-3 col-md-4 mb-4">
+                            <div className="card card-flush">
+                                <div className="card-header">
+                                    <div className="card-title d-flex flex-column">
+                                        <span className="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">0</span>
+                                        <span className="text-gray-500 pt-1 fw-semibold fs-6">Total Invoices</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-xxl-2 col-xl-3 col-md-4 mb-4">
+                            <div className="card card-flush">
+                                <div className="card-header">
+                                    <div className="card-title d-flex flex-column">
+                                        <span className="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">0</span>
+                                        <span className="text-gray-500 pt-1 fw-semibold fs-6">Total Users</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

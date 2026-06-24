@@ -49,6 +49,51 @@ function Sidebar() {
                 </NavLink>
               </div>
 
+              <div className="menu-item">
+                <NavLink className="menu-link" to="/chains">
+                  <span className="menu-icon">
+                      <i className="fa-solid fa-link fs-1"></i>
+                  </span>
+                  <span className="menu-title">Chains</span>
+                </NavLink>
+              </div>
+
+              <div className="menu-item">
+                <NavLink className="menu-link" to="/brands">
+                  <span className="menu-icon">
+                      <i className="fa-regular fa-copyright fs-1"></i>
+                  </span>
+                  <span className="menu-title">Brands</span>
+                </NavLink>
+              </div>
+
+              <div className="menu-item">
+                <NavLink className="menu-link" to="/subzones">
+                  <span className="menu-icon">
+                      <i className="fa-solid fa-globe fs-1"></i>
+                  </span>
+                  <span className="menu-title">SubZones</span>
+                </NavLink>
+              </div>
+
+              <div className="menu-item">
+                <NavLink className="menu-link" to="/estimate">
+                  <span className="menu-icon">
+                      <i className="fa-solid fa-calculator fs-1"></i>
+                  </span>
+                  <span className="menu-title">Estimate</span>
+                </NavLink>
+              </div>
+
+              <div className="menu-item">
+                <NavLink className="menu-link" to="/invoices">
+                  <span className="menu-icon">
+                      <i className="fa-solid fa-file-invoice fs-1"></i>
+                  </span>
+                  <span className="menu-title">Invoices</span>
+                </NavLink>
+              </div>
+
             {/* User Management Only for ADMIN */}
             {role === "ADMIN" && (
               <div className="menu-item">
@@ -60,8 +105,6 @@ function Sidebar() {
                 </NavLink>
               </div>
               )}
-
-              
 
               <div className="menu-item">
                 <NavLink className="menu-link" to="/" onClick={logoutUser}>

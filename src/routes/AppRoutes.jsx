@@ -14,12 +14,17 @@ import ResetPassword from "../pages/auth/ResetPassword";
 // Main
 import Dashboard from "../pages/Dashboard";
 import Groups from "../pages/Groups";
+import Chains from "../pages/Chains";
 import Users from "../pages/Users";
 
 // Errors
 import Error404 from "../pages/errors/Error404";
 import ProtectedRoute from "./ProtectedRoute";
 import Error403 from "../pages/errors/Error403";
+import SubZones from "../pages/SubZones";
+import Brands from "../pages/Brands";
+import Estimate from "../pages/Estimate";
+import Invoices from "../pages/Invoices";
 
 function AppRoutes() {
     return (
@@ -47,6 +52,41 @@ function AppRoutes() {
                 <Route path="/groups" element={
                     <ProtectedRoute allowedRoles={["ADMIN", "SALES"]}>
                         <Groups />
+                    </ProtectedRoute>
+                } />
+
+                {/* Chains */}
+                <Route path="/chains" element={
+                    <ProtectedRoute allowedRoles={["ADMIN", "SALES"]}>
+                        <Chains />
+                    </ProtectedRoute>
+                } />
+
+                {/* Brands */}
+                <Route path="/brands" element={
+                    <ProtectedRoute allowedRoles={["ADMIN", "SALES"]}>
+                        <Brands />
+                    </ProtectedRoute>
+                } />
+
+                {/* SubZones */}
+                <Route path="/subzones" element={
+                    <ProtectedRoute allowedRoles={["ADMIN", "SALES"]}>
+                        <SubZones />
+                    </ProtectedRoute>
+                } />
+            
+                {/* Estimate */}
+                <Route path="/estimate" element={
+                    <ProtectedRoute allowedRoles={["ADMIN", "SALES"]}>
+                        <Estimate />
+                    </ProtectedRoute>
+                } />
+            
+                {/* Invoices */}
+                <Route path="/invoices" element={
+                    <ProtectedRoute allowedRoles={["ADMIN", "SALES"]}>
+                        <Invoices />
                     </ProtectedRoute>
                 } />
 

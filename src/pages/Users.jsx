@@ -1,26 +1,7 @@
 import React, { useState } from 'react';
 import UsersTable from '../components/tables/UsersTable';
 import UserForm from '../components/forms/UserForm';
-
 import toastr from "toastr";
-
-toastr.options = {
-    "closeButton": false,
-    "debug": false,
-    "newestOnTop": false,
-    "progressBar": false,
-    "positionClass": "toastr-top-right",
-    "preventDuplicates": false,
-    "onclick": null,
-    "showDuration": "300",
-    "hideDuration": "1000",
-    "timeOut": "5000",
-    "extendedTimeOut": "1000",
-    "showEasing": "swing",
-    "hideEasing": "linear",
-    "showMethod": "fadeIn",
-    "hideMethod": "fadeOut"
-};
 
 function Users() {
     const [dataTable, setDataTable] = useState(null);

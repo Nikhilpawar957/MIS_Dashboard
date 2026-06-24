@@ -15,7 +15,7 @@ function Header() {
   }, [user, navigate]);
 
   return (
-    <div id="kt_app_header" className="app-header bg-transparent">
+    <div id="kt_app_header" className="app-header bg-dark">
       <div className="app-container container-fluid d-flex align-items-stretch justify-content-between" id="kt_app_header_container">
         <div className="d-flex align-items-center d-lg-none ms-n3 me-1 me-md-2" title="Show sidebar menu">
           <div className="btn btn-icon btn-active-color-primary w-35px h-35px" id="kt_app_sidebar_mobile_toggle">
@@ -27,7 +27,7 @@ function Header() {
         </div>
         <div className="d-flex align-items-center justify-content-center flex-grow-1 flex-lg-grow-0">
           <a href="/admin/dashboard" className="d-lg-none">
-            <img alt="Logo" src="/media/logos/logo.webp" className="h-30px" />
+            MIS
           </a>
         </div>
 

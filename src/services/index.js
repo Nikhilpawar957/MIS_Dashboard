@@ -90,6 +90,18 @@ export const changeUserStatusApi = async (payload) => {
     }
 }
 
+/* Groups API -------------------------------------------------- */
+
+// Get All Groups
+export const getAllGroupsApi = async () => {
+    try {
+        const response = await api.get("/groups/all");
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : error;
+    }
+}
+
 // Get Group By ID
 export const getGroupByIdApi = async (id) => {
     try {
@@ -124,6 +136,48 @@ export const updateGroupApi = async (id, payload) => {
 export const deleteGroupByIdApi = async (id) => {
     try {
         const response = await api.delete(`/groups/${id}`);
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : error;
+    }
+}
+
+/* Chains API -------------------------------------------------- */
+
+// Get Chain By Id
+export const getChainByIdApi = async (id) => {
+    try {
+        const response = await api.get(`/chains/${id}`);
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : error;
+    }
+}
+
+// Add Chain
+export const addChainApi = async (payload) => {
+    try {
+        const response = await api.post("/chains/add", payload);
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : error;
+    }
+}
+
+// Update Chain
+export const updateChainApi = async(id, payload) => {
+    try {
+        const response = await api.patch(`/chains/${id}`, payload);
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : error;
+    }
+}
+
+// Delete Chain
+export const deleteChainByIdApi = async(id) => {
+    try {
+        const response = await api.delete(`/chains/${id}`);
         return response.data;
     } catch (error) {
         throw error.response ? error.response.data : error;
