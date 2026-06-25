@@ -144,6 +144,16 @@ export const deleteGroupByIdApi = async (id) => {
 
 /* Chains API -------------------------------------------------- */
 
+// Get All Chains
+export const getAllChainsApi = async () => {
+    try {
+        const response = await api.get("/chains/all");
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : error;
+    }
+}
+
 // Get Chain By Id
 export const getChainByIdApi = async (id) => {
     try {
@@ -178,6 +188,58 @@ export const updateChainApi = async(id, payload) => {
 export const deleteChainByIdApi = async(id) => {
     try {
         const response = await api.delete(`/chains/${id}`);
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : error;
+    }
+}
+
+/* Brands API -------------------------------------------------- */
+
+// Get All Brands
+export const getAllBrandsApi = async () => {
+    try {
+        const response = await api.get("/brands/all");
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : error;
+    }
+}
+
+// Get Brand By Id
+export const getBrandByIdApi = async (id) => {
+    try {
+        const response = await api.get(`/brands/${id}`);
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : error;
+    }
+}
+
+// Add Brand
+export const addBrandApi = async (payload) => {
+    try {
+        const response = await api.post("/brands/add", payload);
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : error;
+    }
+}
+
+// Update Brand
+export const updateBrandApi = async(id, payload) => {
+    try {
+        const response = await api.patch(`/brands/${id}`, payload);
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : error;
+    }
+}
+
+// Delete Brand
+export const deleteBrandByIdApi = async(id) => {
+    try {
+        const response = await api.delete(`/brands/${id}`);
         return response.data;
     } catch (error) {
         throw error.response ? error.response.data : error;

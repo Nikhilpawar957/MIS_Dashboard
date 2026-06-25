@@ -1,7 +1,20 @@
-import React from 'react'
+import React, { useState }  from 'react';
+import BrandsTable from '../components/tables/BrandsTable';
+import BrandForm from '../components/forms/BrandForm';
+import toastr from "toastr";
 
 function Brands() {
-  document.title = "MIS - Brands";
+    const [dataTable, setDataTable] = useState(null);
+
+    // NEW: State to track if we are adding (null) or editing (an ID)
+    const [selectedBrandId, setSelectedBrandId] = useState(null);
+
+    document.title = "MIS - Brands";
+
+    // NEW: Function to handle adding a new Brand
+    const handleAddNew = () => {
+        setSelectedBrandId(null); // Clears the ID so the form knows it's a fresh entry
+    };
     return (
         <>
             <div id="kt_app_toolbar" className="app-toolbar py-3 py-lg-6">
@@ -18,13 +31,37 @@ function Brands() {
                             <li className="breadcrumb-item text-light">Brands</li>
                         </ul>
                     </div>
+
+                    <div className="d-flex align-items-center gap-2 gap-lg-3">
+                        {/* UPDATED: Add onClick to clear the state when opening the modal natively */}
+                        <button 
+                            className="btn btn-sm fw-bold btn-primary hover-elevate-down" 
+                            data-bs-toggle="modal"
+                            data-bs-target="#addEditModal"
+                            onClick={handleAddNew}
+                        >
+                            Add New
+                        </button>
+                    </div>
                 </div>
             </div>
 
             <div id="kt_app_content" className="app-content flex-column-fluid">
                 <div id="kt_app_content_container" className="app-container container-fluid">
                     {/* UPDATED: Pass a setter down to the table so the Edit buttons can update the ID */}
-                    
+                    <BrandsTable onTableReady={setDataTable}  
+                        onEditClick={setSelectedBrandId} />
+                </div>
+            </div>
+
+            <div className="modal fade" id="addEditModal" tabIndex="-1" aria-labelledby="addEditModalLabel" aria-hidden="true">
+                <div className="modal-dialog modal-dialog-centered">
+                    {/* UPDATED: Pass the selected ID down to the form */}
+                    <BrandForm 
+                        dataTable={dataTable} 
+                        toastr={toastr} 
+                        selectedBrandId={selectedBrandId} 
+                    />
                 </div>
             </div>
         </>
