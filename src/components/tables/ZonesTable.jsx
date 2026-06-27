@@ -4,22 +4,22 @@ import "datatables.net-bs5";
 import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
 import Swal from "sweetalert2";
 import Toastr from "../../utils/toastr";
-import { deleteBrandByIdApi } from "../../services";
+import { deleteZoneByIdApi } from "../../services";
 
-function BrandsTable({ groups = [], chains = [], onTableReady, onEditClick }) {
-    const tableRef = useRef();
-    const dataTableRef = useRef(null);
+function ZonesTable({ brands = [], chains = [], groups = [], onTableReady, onEditClick }) {
+  const tableRef = useRef();
+  const dataTableRef = useRef(null);
 
-    // Manage state for both dropdowns
-    const [selectedGroupId, setSelectedGroupId] = useState("");
-    const [selectedChainId, setSelectedChainId] = useState("");
+  const [selectedGroupId, setSelectedGroupId] = useState("");
+  const [selectedChainId, setSelectedChainId] = useState("");
+  const [selectedBrandId, setSelectedBrandId] = useState("");
 
-    const onEditClickRef = useRef(onEditClick);
-    useEffect(() => {
-        onEditClickRef.current = onEditClick;
-    }, [onEditClick]);
+  const onEditClickRef = useRef(onEditClick);
+  useEffect(() => {
+    onEditClickRef.current = onEditClick;
+  }, [onEditClick]);
 
-    useEffect(() => {
+  useEffect(() => {
         if (!tableRef.current) return;
 
         const token = localStorage.getItem("authToken");
@@ -34,7 +34,7 @@ function BrandsTable({ groups = [], chains = [], onTableReady, onEditClick }) {
                 [10, 15, 25, 50, 100, "All"]
             ],
             ajax: {
-                url: `${process.env.REACT_APP_API_BASE_URL}/brands/datatables`,
+                url: `${process.env.REACT_APP_API_BASE_URL}/zones/datatables`,
                 type: "POST",
                 contentType: "application/json",
                 headers: {
@@ -57,6 +57,7 @@ function BrandsTable({ groups = [], chains = [], onTableReady, onEditClick }) {
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
+                {data: "zoneName"},
                 { data: "brandName" },
                 { data: "companyName" }, // Update these to match your BrandResponseDto
                 { data: "groupName" },
@@ -92,9 +93,7 @@ function BrandsTable({ groups = [], chains = [], onTableReady, onEditClick }) {
             onTableReady(dataTableRef.current);
         }
 
-        // Event bindings omitted for brevity (same as brandsTable)
-
-        $(tableRef.current).off("click.brandsTable").on("click.brandsTable", ".edit-btn", function () {
+        $(tableRef.current).off("click.zonesTable").on("click.zonesTable", ".edit-btn", function () {
             
             const id = $(this).data("id");
             console.log(id);
@@ -108,7 +107,7 @@ function BrandsTable({ groups = [], chains = [], onTableReady, onEditClick }) {
             }
         });
 
-        $(tableRef.current).on("click.brandsTable", ".delete-btn", function () {
+        $(tableRef.current).on("click.zonesTable", ".delete-btn", function () {
             const id = $(this).data("id");
             handleDelete(id);
         });
@@ -120,76 +119,86 @@ function BrandsTable({ groups = [], chains = [], onTableReady, onEditClick }) {
             //     dataTableRef.current = null;
             // }
         };
-    }, [selectedGroupId, selectedChainId, onTableReady]);
+    }, [selectedGroupId, selectedChainId, selectedBrandId, onTableReady]);
 
-    const handleDelete = async (id) => {
-        Swal.fire({
-            title: "Confirm Delete",
-            text: "Are you sure?",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#d33",
-            cancelButtonColor: "#6c757d",
-            confirmButtonText: "Yes",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                deleteBrandByIdApi(id)
-                    .then((response) => {
-                        Toastr.success(response.message);
-                        dataTableRef.current.ajax.reload(null, false);
-                    })
-                    .catch((error) => {
-                        Toastr.error(error.message || "Something Went Wrong");
-                    });
-            }
-        });
-    };
+  const handleDelete = async (id) => {
+    Swal.fire({
+      title: "Confirm Delete",
+      text: "Are you sure?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#6c757d",
+      confirmButtonText: "Yes",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteZoneByIdApi(id)
+          .then((response) => {
+            Toastr.success(response.message);
+            dataTableRef.current.ajax.reload(null, false);
+          })
+          .catch((error) => {
+            Toastr.error(error.message || "Something Went Wrong");
+          });
+      }
+    });
+  };
 
-    return (
-        <div className="card">
-            <div className="card-header border-0 pt-6 d-flex justify-content-between align-items-center">
-                <div className="card-title m-0">
-                    <h3 className="fw-bolder m-0">Brands List</h3>
-                </div>
-
-                {/* Flex container for the two dropdowns */}
-                <div className="card-toolbar d-flex gap-3">
-                    <label htmlFor="" className="form-label me-4 fs-4 mt-1">Filter:</label>
-                    <select
-                        className="form-select form-select-sm form-select-solid w-200px"
-                        value={selectedGroupId}
-                        onChange={(e) => setSelectedGroupId(e.target.value)}
-                    >
-                        <option value="">All Groups</option>
-                        {groups.map((g) => <option key={g.id} value={g.id}>{g.name}</option>)}
-                    </select>
-
-                    <select
-                        className="form-select form-select-sm form-select-solid w-200px"
-                        value={selectedChainId}
-                        onChange={(e) => setSelectedChainId(e.target.value)}
-                    >
-                        <option value="">All Chains</option>
-                        {chains.map((c) => <option key={c.id} value={c.id}>{c.companyName}</option>)}
-                    </select>
-                </div>
-            </div>
-
-            <div className="card-body pt-0">
-                <table ref={tableRef} className="table align-middle table-row-dashed fs-6 gy-2 mb-0" style={{ width: "100%" }}>
-                    <thead>
-                        <tr className="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
-                            <th className="w-10px pe-2">#</th>
-                            <th>Brand Name</th>
-                            <th>Chain</th>
-                            <th>Group</th>
-                            <th className="text-end min-w-70px">Actions</th>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
+  return (
+    <div className="card">
+      <div className="card-header border-0 pt-6 d-flex justify-content-between align-items-center">
+        <div className="card-title m-0">
+          <h3 className="fw-bolder m-0">Zones List</h3>
         </div>
-    );
+
+        {/* Flex container for the two dropdowns */}
+        <div className="card-toolbar d-flex gap-3">
+          <label htmlFor="" className="form-label me-4 fs-4 mt-1">Filter:</label>
+          <select
+            className="form-select form-select-sm form-select-solid w-200px"
+            value={selectedBrandId}
+            onChange={(e) => setSelectedBrandId(e.target.value)}
+          >
+            <option value="">All Brands</option>
+            {brands.map((b) => <option key={b.id} value={b.id}>{b.brandName}</option>)}
+          </select>
+
+          <select
+            className="form-select form-select-sm form-select-solid w-200px"
+            value={selectedGroupId}
+            onChange={(e) => setSelectedGroupId(e.target.value)}
+          >
+            <option value="">All Groups</option>
+            {groups.map((g) => <option key={g.id} value={g.id}>{g.name}</option>)}
+          </select>
+
+          <select
+            className="form-select form-select-sm form-select-solid w-200px"
+            value={selectedChainId}
+            onChange={(e) => setSelectedChainId(e.target.value)}
+          >
+            <option value="">All Chains</option>
+            {chains.map((c) => <option key={c.id} value={c.id}>{c.companyName}</option>)}
+          </select>
+        </div>
+      </div>
+
+      <div className="card-body pt-0">
+        <table ref={tableRef} className="table align-middle table-row-dashed fs-6 gy-2 mb-0" style={{ width: "100%" }}>
+          <thead>
+            <tr className="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
+              <th className="w-10px pe-2">#</th>
+              <th>Zone</th>
+              <th>Brand</th>
+              <th>Chain</th>
+              <th>Group</th>
+              <th className="text-end min-w-70px">Actions</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+  );
 }
 
-export default BrandsTable
+export default ZonesTable

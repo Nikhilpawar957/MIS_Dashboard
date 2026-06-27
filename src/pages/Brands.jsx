@@ -1,13 +1,61 @@
-import React, { useState }  from 'react';
+import React, { useState, useEffect } from 'react';
 import BrandsTable from '../components/tables/BrandsTable';
 import BrandForm from '../components/forms/BrandForm';
 import toastr from "toastr";
+import { getAllGroupsApi, getAllChainsApi } from '../services';
 
 function Brands() {
     const [dataTable, setDataTable] = useState(null);
 
     // NEW: State to track if we are adding (null) or editing (an ID)
     const [selectedBrandId, setSelectedBrandId] = useState(null);
+
+    const [groups, setGroups] = useState([]);
+    const [chains, setChains] = useState([]);
+
+    // 2. Wrap group fetching in a useEffect so it only runs once on mount
+    useEffect(() => {
+        getAllGroupsApi()
+            .then((response) => {
+                if (response.data) {
+                    // Update state with the fetched array
+                    setGroups(response.data);
+                }
+            })
+            .catch((error) => {
+                console.error("Error Fetching Groups", error);
+            });
+
+        getAllChainsApi().then((response) => {
+            if (response.data) {
+                // Update state with the fetched array
+                setChains(response.data);
+            }
+        })
+            .catch((error) => {
+                console.error("Error Fetching Chains", error);
+            });
+    }, []); // Empty dependency array means this runs once on mount
+
+    useEffect(() => {
+        const modalElement = document.getElementById("addEditModal");
+
+        const handleModalHidden = () => {
+            // Wipes the ID clean. Next time you click edit, it's a guaranteed state change.
+            setSelectedBrandId(null);
+        };
+
+        if (modalElement) {
+            modalElement.addEventListener("hidden.bs.modal", handleModalHidden);
+        }
+
+        // Cleanup listener on unmount
+        return () => {
+            if (modalElement) {
+                modalElement.removeEventListener("hidden.bs.modal", handleModalHidden);
+            }
+        };
+    }, []);
 
     document.title = "MIS - Brands";
 
@@ -34,8 +82,8 @@ function Brands() {
 
                     <div className="d-flex align-items-center gap-2 gap-lg-3">
                         {/* UPDATED: Add onClick to clear the state when opening the modal natively */}
-                        <button 
-                            className="btn btn-sm fw-bold btn-primary hover-elevate-down" 
+                        <button
+                            className="btn btn-sm fw-bold btn-primary hover-elevate-down"
                             data-bs-toggle="modal"
                             data-bs-target="#addEditModal"
                             onClick={handleAddNew}
@@ -49,7 +97,10 @@ function Brands() {
             <div id="kt_app_content" className="app-content flex-column-fluid">
                 <div id="kt_app_content_container" className="app-container container-fluid">
                     {/* UPDATED: Pass a setter down to the table so the Edit buttons can update the ID */}
-                    <BrandsTable onTableReady={setDataTable}  
+                    <BrandsTable
+                        groups={groups}
+                        chains={chains}
+                        onTableReady={setDataTable}
                         onEditClick={setSelectedBrandId} />
                 </div>
             </div>
@@ -57,10 +108,11 @@ function Brands() {
             <div className="modal fade" id="addEditModal" tabIndex="-1" aria-labelledby="addEditModalLabel" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered">
                     {/* UPDATED: Pass the selected ID down to the form */}
-                    <BrandForm 
-                        dataTable={dataTable} 
-                        toastr={toastr} 
-                        selectedBrandId={selectedBrandId} 
+                    <BrandForm
+                        chains={chains}
+                        dataTable={dataTable}
+                        toastr={toastr}
+                        selectedBrandId={selectedBrandId}
                     />
                 </div>
             </div>

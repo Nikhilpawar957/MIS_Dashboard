@@ -245,3 +245,55 @@ export const deleteBrandByIdApi = async(id) => {
         throw error.response ? error.response.data : error;
     }
 }
+
+/* Zones API -------------------------------------------------- */
+
+// Get All Zones
+export const getAllZonesApi = async () => {
+    try {
+        const response = await api.get("/zones/all");
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : error;
+    }
+}
+
+// Get Zone By Id
+export const getZoneByIdApi = async (id) => {
+    try {
+        const response = await api.get(`/zones/${id}`);
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : error;
+    }
+}
+
+// Add Zone
+export const addZoneApi = async (payload) => {
+    try {
+        const response = await api.post("/zones/add", payload);
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : error;
+    }
+}
+
+// Update Zone
+export const updateZoneApi = async(id, payload) => {
+    try {
+        const response = await api.patch(`/zones/${id}`, payload);
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : error;
+    }
+}
+
+// Delete Zone
+export const deleteZoneByIdApi = async(id) => {
+    try {
+        const response = await api.delete(`/zones/${id}`);
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : error;
+    }
+}

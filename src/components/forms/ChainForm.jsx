@@ -1,15 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from "react-hook-form";
 import Toastr from "../../utils/toastr";
-import { addChainApi, updateChainApi, getChainByIdApi, getAllGroupsApi } from '../../services';
+import { addChainApi, updateChainApi, getChainByIdApi } from '../../services';
 
-function ChainForm({ dataTable, selectedChainId }) {
+function ChainForm({ groups = [], dataTable, selectedChainId }) {
   const { register, handleSubmit, reset, setValue, clearErrors, formState: { errors } } = useForm({
     defaultValues: { id: "", companyName: "", gstNumber: "", customerGroupId: "" }
   });
-
-  // 1. Add state to hold your groups data
-  const [groups, setGroups] = useState([]);
 
   const formValidation = {
     customerGroupId: { required: { value: true, message: "Select Group" } },
@@ -74,20 +71,6 @@ function ChainForm({ dataTable, selectedChainId }) {
       }, 0);
     }
   }, [selectedChainId, reset]);
-
-  // 2. Wrap group fetching in a useEffect so it only runs once on mount
-  useEffect(() => {
-    getAllGroupsApi()
-      .then((response) => {
-        if (response.data) {
-          // Update state with the fetched array
-          setGroups(response.data);
-        }
-      })
-      .catch((error) => {
-        console.error("Error Fetching Groups", error);
-      });
-  }, []); // Empty dependency array means this runs once on mount
 
   const closeModalProperly = () => {
     const modalEl = document.getElementById("addEditModal");

@@ -1,19 +1,52 @@
-import React, { useState }  from 'react';
+import React, { useState, useEffect } from 'react';
 import ChainsTable from "../components/tables/ChainsTable";
 import ChainForm from "../components/forms/ChainForm";
 import toastr from "toastr";
+import { getAllGroupsApi } from '../services';
 
 function Chains() {
     const [dataTable, setDataTable] = useState(null);
 
-    // NEW: State to track if we are adding (null) or editing (an ID)
     const [selectedChainId, setSelectedChainId] = useState(null);
+
+    const [groups, setGroups] = useState([]);
+
+    useEffect(() => {
+        getAllGroupsApi()
+            .then((response) => {
+                if (response.data) {
+                    setGroups(response.data);
+                }
+            })
+            .catch((error) => {
+                console.error("Error Fetching Groups", error);
+            });
+    }, []);
+
+    useEffect(() => {
+        const modalElement = document.getElementById("addEditModal");
+        
+        const handleModalHidden = () => {
+            // Wipes the ID clean. Next time you click edit, it's a guaranteed state change.
+            setSelectedChainId(null); 
+        };
+
+        if (modalElement) {
+            modalElement.addEventListener("hidden.bs.modal", handleModalHidden);
+        }
+
+        // Cleanup listener on unmount
+        return () => {
+            if (modalElement) {
+                modalElement.removeEventListener("hidden.bs.modal", handleModalHidden);
+            }
+        };
+    }, []);
 
     document.title = "MIS - Chains";
 
-    // NEW: Function to handle adding a new chain
     const handleAddNew = () => {
-        setSelectedChainId(null); // Clears the ID so the form knows it's a fresh entry
+        setSelectedChainId(null);
     };
 
     return (
@@ -32,11 +65,10 @@ function Chains() {
                             <li className="breadcrumb-item text-light">Chains</li>
                         </ul>
                     </div>
-                    
+
                     <div className="d-flex align-items-center gap-2 gap-lg-3">
-                        {/* UPDATED: Add onClick to clear the state when opening the modal natively */}
-                        <button 
-                            className="btn btn-sm fw-bold btn-primary hover-elevate-down" 
+                        <button
+                            className="btn btn-sm fw-bold btn-primary hover-elevate-down"
                             data-bs-toggle="modal"
                             data-bs-target="#addEditModal"
                             onClick={handleAddNew}
@@ -49,10 +81,10 @@ function Chains() {
 
             <div id="kt_app_content" className="app-content flex-column-fluid">
                 <div id="kt_app_content_container" className="app-container container-fluid">
-                    {/* UPDATED: Pass a setter down to the table so the Edit buttons can update the ID */}
-                    <ChainsTable 
-                        onTableReady={setDataTable} 
-                        onEditClick={setSelectedChainId} 
+                    <ChainsTable
+                        groups={groups}
+                        onTableReady={setDataTable}
+                        onEditClick={setSelectedChainId}
                     />
                 </div>
             </div>
@@ -60,10 +92,11 @@ function Chains() {
             <div className="modal fade" id="addEditModal" tabIndex="-1" aria-labelledby="addEditModalLabel" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered">
                     {/* UPDATED: Pass the selected ID down to the form */}
-                    <ChainForm 
-                        dataTable={dataTable} 
-                        toastr={toastr} 
-                        selectedChainId={selectedChainId} 
+                    <ChainForm
+                        groups={groups}
+                        dataTable={dataTable}
+                        toastr={toastr}
+                        selectedChainId={selectedChainId}
                     />
                 </div>
             </div>

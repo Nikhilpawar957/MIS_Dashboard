@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from "react-hook-form";
 import Toastr from "../../utils/toastr";
-import { addBrandApi, updateBrandApi, getBrandByIdApi, getAllChainsApi } from '../../services';
+import { addBrandApi, updateBrandApi, getBrandByIdApi } from '../../services';
 
-function BrandForm({ dataTable, selectedBrandId }) {
+function BrandForm({ chains = [], dataTable, selectedBrandId }) {
     const { register, handleSubmit, reset, setValue, clearErrors, formState: { errors } } = useForm({
         defaultValues: { id: "", brandName: "", chainId: "" }
     });
-
-    const [chains, setChains] = useState([]);
 
     const formValidation = {
         chainId: { required: { value: true, message: "Select Chain" } },
@@ -65,19 +63,6 @@ function BrandForm({ dataTable, selectedBrandId }) {
         }
     }, [selectedBrandId, reset]);
 
-    useEffect(() => {
-        getAllChainsApi()
-            .then((response) => {
-                if (response.data) {
-                    // Update state with the fetched array
-                    setChains(response.data);
-                }
-            })
-            .catch((error) => {
-                console.error("Error Fetching Chains", error);
-            });
-    }, []);
-
     const closeModalProperly = () => {
         const modalEl = document.getElementById("addEditModal");
         if (modalEl) {
@@ -118,7 +103,7 @@ function BrandForm({ dataTable, selectedBrandId }) {
 
     return (
         <>
-            <form id="chainForm" className="modal-content" onSubmit={handleSubmit(onSubmit)}>
+            <form id="brandForm" className="modal-content" onSubmit={handleSubmit(onSubmit)}>
                 <div className="modal-header py-2">
                     <h1 className="modal-title fs-3">{selectedBrandId ? "Edit Brand" : "Add Brand"}</h1>
                     <div className="btn btn-icon btn-sm btn-active-light-danger ms-2" data-bs-dismiss="modal">
