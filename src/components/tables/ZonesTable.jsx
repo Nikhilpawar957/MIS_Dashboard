@@ -43,6 +43,7 @@ function ZonesTable({ brands = [], chains = [], groups = [], onTableReady, onEdi
                 data: function (d) {
                     // Pass BOTH filters to the Spring Boot DTO
                     d.customFilters = {
+                        brandId: selectedBrandId || null,
                         groupId: selectedGroupId || null,
                         chainId: selectedChainId || null
                     };

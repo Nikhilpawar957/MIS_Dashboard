@@ -154,6 +154,16 @@ export const getAllChainsApi = async () => {
     }
 }
 
+// Get All Chains By Group Id
+export const getAllChainsByGroupIdApi = async (groupId) => {
+    try {
+        const response = await api.get(`/chains/groupId/${groupId}`);
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : error;
+    }
+}
+
 // Get Chain By Id
 export const getChainByIdApi = async (id) => {
     try {
@@ -175,7 +185,7 @@ export const addChainApi = async (payload) => {
 }
 
 // Update Chain
-export const updateChainApi = async(id, payload) => {
+export const updateChainApi = async (id, payload) => {
     try {
         const response = await api.patch(`/chains/${id}`, payload);
         return response.data;
@@ -185,7 +195,7 @@ export const updateChainApi = async(id, payload) => {
 }
 
 // Delete Chain
-export const deleteChainByIdApi = async(id) => {
+export const deleteChainByIdApi = async (id) => {
     try {
         const response = await api.delete(`/chains/${id}`);
         return response.data;
@@ -200,6 +210,16 @@ export const deleteChainByIdApi = async(id) => {
 export const getAllBrandsApi = async () => {
     try {
         const response = await api.get("/brands/all");
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : error;
+    }
+}
+
+// Get All Brands By Chain Id
+export const getAllBrandsByChainIdApi = async (chainId) => {
+    try {
+        const response = await api.get(`/brands/chainId/${chainId}`);
         return response.data;
     } catch (error) {
         throw error.response ? error.response.data : error;
@@ -227,7 +247,7 @@ export const addBrandApi = async (payload) => {
 }
 
 // Update Brand
-export const updateBrandApi = async(id, payload) => {
+export const updateBrandApi = async (id, payload) => {
     try {
         const response = await api.patch(`/brands/${id}`, payload);
         return response.data;
@@ -237,7 +257,7 @@ export const updateBrandApi = async(id, payload) => {
 }
 
 // Delete Brand
-export const deleteBrandByIdApi = async(id) => {
+export const deleteBrandByIdApi = async (id) => {
     try {
         const response = await api.delete(`/brands/${id}`);
         return response.data;
@@ -252,6 +272,16 @@ export const deleteBrandByIdApi = async(id) => {
 export const getAllZonesApi = async () => {
     try {
         const response = await api.get("/zones/all");
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : error;
+    }
+}
+
+// Get All Zones By Brand Id
+export const getAllZonesByBrandIdApi = async (brandId) => {
+    try {
+        const response = await api.get(`/zones/brandId/${brandId}`);
         return response.data;
     } catch (error) {
         throw error.response ? error.response.data : error;
@@ -279,7 +309,7 @@ export const addZoneApi = async (payload) => {
 }
 
 // Update Zone
-export const updateZoneApi = async(id, payload) => {
+export const updateZoneApi = async (id, payload) => {
     try {
         const response = await api.patch(`/zones/${id}`, payload);
         return response.data;
@@ -289,9 +319,61 @@ export const updateZoneApi = async(id, payload) => {
 }
 
 // Delete Zone
-export const deleteZoneByIdApi = async(id) => {
+export const deleteZoneByIdApi = async (id) => {
     try {
         const response = await api.delete(`/zones/${id}`);
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : error;
+    }
+}
+
+/* Estimates API -------------------------------------------------- */
+
+// Get All Estimates
+export const getAllEstimatesApi = async () => {
+    try {
+        const response = await api.get("/estimates/all");
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : error;
+    }
+}
+
+// Get Estimate By Id
+export const getEstimateByIdApi = async (id) => {
+    try {
+        const response = await api.get(`/estimates/${id}`);
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : error;
+    }
+}
+
+// Add Estimate
+export const addEstimateApi = async (payload) => {
+    try {
+        const response = await api.post("/estimates/add", payload);
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : error;
+    }
+}
+
+// Update Estimate
+export const updateEstimateApi = async (id, payload) => {
+    try {
+        const response = await api.patch(`/estimates/${id}`, payload);
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : error;
+    }
+}
+
+// Delete Estimate
+export const deleteEstimateByIdApi = async (id) => {
+    try {
+        const response = await api.delete(`/estimates/${id}`);
         return response.data;
     } catch (error) {
         throw error.response ? error.response.data : error;
